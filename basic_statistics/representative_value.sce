@@ -1,4 +1,4 @@
-rangeData = 1:1000;  // 1から1000の範囲を示します。
+rangeData = 2:1001;  // 1から1000の範囲を示します。
 
 DATA = csvRead("./src/data.csv",',', [], 'string');   // data.csvを読み込みます。
 

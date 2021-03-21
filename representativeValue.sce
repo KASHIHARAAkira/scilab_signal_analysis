@@ -1,33 +1,39 @@
-rangeData = 3000:4000;  // Extract the area for view
+rangeData = 1:1000;  // 1から1000の範囲を示します。
 
-DATA = csvRead("./src/data.csv",',', [], 'string');   // Import data
+DATA = csvRead("./src/data.csv",',', [], 'string');   // data.csvを読み込みます。
 
-TEMP = DATA(rangeData, 2).';    // Extract temperature data
-TEMP = strtod(TEMP);    // Convert string to double (decimal)
+TEMP = DATA(rangeData, 2).';    // 読み込んだデータの中から、気温データだけを抽出します。
+TEMP = strtod(TEMP);    // 文字列データとして読み込んだので、数値に変換します。
 
-maxTemp = max(TEMP) // Maximum temperature
-minTemp = min(TEMP) // Minimum temperature
-meanTemp = mean(TEMP)   // Average of temperature
-medianTemp = median(TEMP)   // Median of temperature
+// データを線グラフに描画する
+plot(TEMP, 'b')  // 気温データを青色の線グラフで表示する
+ylabel("Temperature [degree]");  // y軸のラベルを表示
+xlabel("Hour [-]");  // x軸のラベルを表示
 
-// Make an array of result
-representTemp = [minTemp, maxTemp, meanTemp, medianTemp]    // Result array
-strLegend = ["min","max","mean", "median"]    // Legend array
-representiveValue = [strLegend; string(representTemp)]  // A array for display
-disp(representiveValue) // Display result
+// 代表値の算出
+maxTemp = max(TEMP) // 最大値の算出
+minTemp = min(TEMP) // 最小値の算出
+meanTemp = mean(TEMP)   // 平均値の算出
+medianTemp = median(TEMP)   // 中央値の算出
 
-// plot representative value
-[srow, scol] = size(TEMP);  // Get the size of plot
-plotDataMin = minTemp * ones(scol,1);   // Minimum value plot data
-plotDataMax = maxTemp * ones(scol,1);   // Maximum value plot data
-plotDataMean = meanTemp * ones(scol,1); // Mean value plot data
-plotDataMedian = medianTemp * ones(scol,1); // Median value plot data
+// 代表値の算出結果をコンソールに出力するためのブロック
+representTemp = [minTemp, maxTemp, meanTemp, medianTemp]    // 代表値算出結果を配列に代入
+strLegend = ["min","max","mean", "median"]    // 凡例の配列を作成
+representiveValue = [strLegend; string(representTemp)]  // 表示用の配列を作成
+disp(representiveValue) // 結果の表示
 
-plot(TEMP, 'b')  // Plot 2D line graph of raw data
-ylabel("Temperature [degree]")  // y-axis data
-xlabel("Hour [-]")  // x-axis label
+// 代表値をグラフに描画するためのデータ作成
+[srow, scol] = size(TEMP);  // プロットする最大サイズを取得
+plotDataMin = minTemp * ones(scol,1);   // 最小値を描画するための配列を作成
+plotDataMax = maxTemp * ones(scol,1);   // 最大値を描画するための配列を作成
+plotDataMean = meanTemp * ones(scol,1); // 平均値を描画するための配列を作成
+plotDataMedian = medianTemp * ones(scol,1); // 中央値を描画するための配列を作成
 
-plot(plotDataMin, 'r-')     // plot minimum data
-plot(plotDataMax, 'r--')    // plot maximum data
-plot(plotDataMean, 'r:')    // plot mean data
-plot(plotDataMedian, 'r-.') // plot median data
+// 代表値を描画する
+plot(plotDataMin, 'r-')     // 最小値の描画（赤色の実線）
+plot(plotDataMax, 'r--')    // 最小値の描画（--の破線）
+plot(plotDataMean, 'r:')    // 平均値の描画（..の点線）
+plot(plotDataMedian, 'r-.') // 中央値の描画（-.の点破線）
+a = gca();  // アクティブな軸情報を取得
+a.data_bounds(:,1) = [0;1000];  //描画範囲を前1000個に限定
+
